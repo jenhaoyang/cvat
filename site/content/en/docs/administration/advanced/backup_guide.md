@@ -42,10 +42,10 @@ Backup data:
 
 ```shell
 mkdir backup
-docker run --rm --name temp_backup --volumes-from cvat_db -v $(pwd)/backup:/backup ubuntu tar -czvf /backup/cvat_db.tar.gz /var/lib/postgresql/data
-docker run --rm --name temp_backup --volumes-from cvat_server -v $(pwd)/backup:/backup ubuntu tar -czvf /backup/cvat_data.tar.gz /home/django/data
+docker run --rm --name temp_backup --volumes-from cvat_db -v $(pwd)/backup:/backup ubuntu:focal tar -czvf /backup/cvat_db.tar.gz /var/lib/postgresql/data
+docker run --rm --name temp_backup --volumes-from cvat_server -v $(pwd)/backup:/backup ubuntu:focal tar -czvf /backup/cvat_data.tar.gz /home/django/data
 # [optional]
-docker run --rm --name temp_backup --volumes-from cvat_elasticsearch -v $(pwd)/backup:/backup ubuntu tar -czvf /backup/cvat_events.tar.gz /usr/share/elasticsearch/data
+docker run --rm --name temp_backup --volumes-from cvat_elasticsearch -v $(pwd)/backup:/backup ubuntu:focal tar -czvf /backup/cvat_events.tar.gz /usr/share/elasticsearch/data
 ```
 
 Make sure the backup archives have been created, the output of `ls backup` command should look like this:
@@ -73,10 +73,10 @@ Restore data:
 
 ```shell
 cd <path_to_backup_folder>
-docker run --rm --name temp_backup --volumes-from cvat_db -v $(pwd):/backup ubuntu bash -c "cd /var/lib/postgresql/data && tar -xvf /backup/cvat_db.tar.gz --strip 4"
-docker run --rm --name temp_backup --volumes-from cvat_server -v $(pwd):/backup ubuntu bash -c "cd /home/django/data && tar -xvf /backup/cvat_data.tar.gz --strip 3"
+docker run --rm --name temp_backup --volumes-from cvat_db -v $(pwd):/backup ubuntu:focal bash -c "cd /var/lib/postgresql/data && tar -xvf /backup/cvat_db.tar.gz --strip 4"
+docker run --rm --name temp_backup --volumes-from cvat_server -v $(pwd):/backup ubuntu:focal bash -c "cd /home/django/data && tar -xvf /backup/cvat_data.tar.gz --strip 3"
 # [optional]
-docker run --rm --name temp_backup --volumes-from cvat_elasticsearch -v $(pwd):/backup ubuntu bash -c "cd /usr/share/elasticsearch/data && tar -xvf /backup/cvat_events.tar.gz --strip 4"
+docker run --rm --name temp_backup --volumes-from cvat_elasticsearch -v $(pwd):/backup ubuntu:focal bash -c "cd /usr/share/elasticsearch/data && tar -xvf /backup/cvat_events.tar.gz --strip 4"
 ```
 
 After that run CVAT as usual:
